@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>385</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayoutIoctlCode">
+      <item>
+       <widget class="QLabel" name="labelIoctlCode">
+        <property name="text">
+         <string>IO Control Code:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="HexSpinBox" name="spinBoxIoctlCode"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacerIoctlCode">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBoxComponents">
+      <property name="title">
+       <string>Components</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QGridLayout" name="gridLayoutComponents">
+         <item row="2" column="0">
+          <widget class="QLabel" name="labelFunction">
+           <property name="text">
+            <string>Function:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="comboBoxAccess">
+           <item>
+            <property name="text">
+             <string>FILE_ANY_ACCESS</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>FILE_READ_DATA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>FILE_WRITE_DATA</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>READ and WRITE</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelDeviceType">
+           <property name="text">
+            <string>Device Type:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QCheckBox" name="checkBoxCommonBit">
+           <property name="text">
+            <string>Common Bit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="comboBoxTransferMethod">
+           <item>
+            <property name="text">
+             <string>METHOD_BUFFERED</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>METHOD_IN_DIRECT</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>METHOD_OUT_DIRECT</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>METHOD_NEITHER</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="labelAccess">
+           <property name="text">
+            <string>Access:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QCheckBox" name="checkBoxCustomBit">
+           <property name="text">
+            <string>Custom Bit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="labelTransferMethod">
+           <property name="text">
+            <string>Transfer Method:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="HexSpinBox" name="spinBoxDeviceType"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="HexSpinBox" name="spinBoxFunction"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayoutBytes">
+      <item>
+       <widget class="QLabel" name="labelBytes">
+        <property name="text">
+         <string>Bytes:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacerBytes">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tableWidgetBytes">
+      <column>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayoutDeviceName">
+      <item>
+       <widget class="QLabel" name="labelDeviceName">
+        <property name="text">
+         <string>Device Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelDeviceNameValue">
+        <property name="text">
+         <string>Unknown</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacerDeviceName">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalFunctionName">
+      <item>
+       <widget class="QLabel" name="labelFunctionName">
+        <property name="text">
+         <string>Function Name:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelFunctionNameValue">
+        <property name="text">
+         <string>Unknown</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacerFunctionName">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HexSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>HexSpinBox.hpp</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

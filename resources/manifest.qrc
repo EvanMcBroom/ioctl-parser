@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/fonts">
+        <file>OpenSans-Regular.ttf</file>
+        <file>SourceCodePro-Regular.ttf</file>
+    </qresource>
+    <qresource prefix="/images">
+        <!-- https://www.iconfinder.com/icons/383132/gear_icon -->
+        <file>gear_icon.png</file>
+    </qresource>
+</RCC>
