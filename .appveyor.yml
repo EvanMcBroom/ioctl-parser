@@ -1,0 +1,17 @@
+branches:
+  only:
+    - master
+
+environment:
+  matrix:
+  - platform: x64
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    BUILD_SHARED_LIBS: ON
+
+build_script:
+  - mkdir builds
+  - cd builds
+  - cmake .. -DCMAKE_GENERATOR_PLATFORM=x64 -DQt5_DIR=C:/Qt/5.15.2/msvc2019_64/lib/cmake/Qt5
+  - cmake --build . --config Release
+
+deploy: off

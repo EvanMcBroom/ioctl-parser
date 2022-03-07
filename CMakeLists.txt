@@ -3,6 +3,12 @@ project(ioctl-parser LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(Parser ${PROJECT_NAME})
 
+# Force static linking of the VC runtime
+string(REGEX REPLACE "/M[TD]d?" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+string(REGEX REPLACE "/M[TD]d?" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+
 # Find Qt and setup auto processing for MOC, RCC, and UIC files
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -11,7 +17,7 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 
 # Add and configure the parser executable
-add_executable(${Parser} main.cpp)
+add_executable(${Parser} WIN32 main.cpp resources/icon.rc)
 set_target_properties(${Parser} PROPERTIES AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(${Parser} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/widgets)
 # Add the directory which the UIC files are auto generated in
@@ -56,7 +62,7 @@ if(WIN32)
             COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
             COMMAND set PATH=%PATH%$<SEMICOLON>${qt5_install_prefix}/bin
             COMMAND Qt5::windeployqt --dir "$<TARGET_FILE_DIR:${Parser}>" "$<TARGET_FILE_DIR:${Parser}>/$<TARGET_FILE_NAME:${Parser}>"
-                --no-patchqt --no-plugins --no-quick-import --no-translations --no-system-d3d-compiler --no-compiler-runtime --no-webkit2 --no-angle --no-opengl-sw --no-svg
+                --no-patchqt --no-quick-import --no-translations --no-system-d3d-compiler --no-webkit2 --no-angle --no-opengl-sw --no-svg
         )
     endif()
 endif()
