@@ -13,6 +13,12 @@ public:
     static QPixmap defaultWindowIcon();
 
 private Q_SLOTS:
+    void on_checkBoxCommonBit_stateChanged(int state);
+    void on_checkBoxCustomBit_stateChanged(int state);
+    void on_comboBoxAccess_currentIndexChanged(int index);
+    void on_comboBoxTransferMethod_currentIndexChanged(int index);
+    void on_spinBoxDeviceType_valueChanged(int value);
+    void on_spinBoxFunction_valueChanged(int value);
     void on_spinBoxIoctlCode_valueChanged(int value);
 
 private:

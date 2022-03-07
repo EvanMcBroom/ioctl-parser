@@ -2,15 +2,13 @@
 #include <QSpinBox>
 #include <QWidget>
 
+// Modified from: https://stackoverflow.com/a/26581445/11039217
 class HexSpinBox : public QSpinBox {
 public:
-    HexSpinBox(bool only16Bits, QWidget *parent = 0) : QSpinBox(parent), m_only16Bits(only16Bits) {
+    HexSpinBox(QWidget *parent = 0) : QSpinBox(parent) {
         setPrefix("0x");
         setDisplayIntegerBase(16);
-        if (only16Bits)
-            setRange(0, 0xFFFF);
-        else
-            setRange(INT_MIN, INT_MAX);
+        setRange(INT_MIN, INT_MAX);
     }
     unsigned int hexValue() const {
         return u(value());
@@ -18,9 +16,13 @@ public:
     void setHexValue(unsigned int value) {
         setValue(i(value));
     }
+    void setBitWidth(unsigned char width) {
+        fillWidth = width >> 2;
+        setRange(0, (1 << width) - 1);
+    }
 protected:
     QString textFromValue(int value) const {
-        return QString::number(u(value), 16).toUpper();
+        return QString("%1").arg(u(value), fillWidth, 16, QChar('0')).toUpper();
     }
     int valueFromText(const QString &text) const {
         return i(text.toUInt(0, 16));
@@ -35,14 +37,14 @@ protected:
             return QValidator::Intermediate;
         input = QString("0x") + copy.toUpper();
         bool okay;
-        unsigned int val = copy.toUInt(&okay, 16);
-        if (!okay || (m_only16Bits && val > 0xFFFF))
+        auto value{ copy.toUInt(&okay, 16) };
+        if (!okay)
             return QValidator::Invalid;
         return QValidator::Acceptable;
     }
 
 private:
-    bool m_only16Bits;
+    uchar fillWidth{ 8 };
     inline unsigned int u(int i) const {
         return *reinterpret_cast<unsigned int *>(&i);
     }
