@@ -68,7 +68,7 @@ void MainWindow::on_spinBoxIoctlCode_valueChanged(int value) {
     spinBoxDeviceType->setValue((value & 0x7FFF0000) >> 16);
     spinBoxFunction->setValue((value & 0x1FFC) >> 2);
 
-    if (deviceMap.contains(value & 0x7FFF0000)) {
+    if (value != 0 && deviceMap.contains(value & 0x7FFF0000)) {
         auto& deviceInfo{ deviceMap[value & 0x7FFF0000] };
         labelDeviceNameValue->setText(deviceInfo.first);
         labelFunctionNameValue->setText((deviceInfo.second.contains(value & 0x1FFC)) ? deviceInfo.second[value & 0x1FFC] : tr("Unknown"));

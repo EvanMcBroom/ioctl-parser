@@ -5,10 +5,6 @@
 #include <QFileInfo>
 #include <QSettings>
 
-// References:
-// https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes
-// https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/d4drvif/nf-d4drvif-ctl_code
-
 namespace {
     void AddToDeviceMap(DeviceMap& deviceMap, const QString& path) {
         QSettings settings{ path, QSettings::IniFormat };
