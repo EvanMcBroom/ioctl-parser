@@ -6,6 +6,7 @@
 class HexSpinBox : public QSpinBox {
 public:
     HexSpinBox(QWidget *parent = 0) : QSpinBox(parent) {
+        setFont(QFont("Source Code Pro", 10));
         setPrefix("0x");
         setDisplayIntegerBase(16);
         setRange(INT_MIN, INT_MAX);

@@ -1,9 +1,10 @@
 #include <MainWindow.hpp>
 #include <QMessageBox>
+#include <QTableWidgetItem>
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     setupUi(this);
-    setWindowIcon(MainWindow::defaultWindowIcon());
+    setWindowIcon(QPixmap(":images/gear_icon.png"));
     setWindowTitle(QCoreApplication::applicationName());
 
     spinBoxDeviceType->setBitWidth(15);
@@ -11,11 +12,22 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     // Layout the table of bytes
     tableWidgetBytes->setFont(QFont("Source Code Pro", 10));
-
-}
-
-QPixmap MainWindow::defaultWindowIcon() {
-    return QPixmap(":images/gear_icon.png");
+    tableWidgetBytes->verticalHeader()->hide();
+    tableWidgetBytes->setColumnCount(32);
+    tableWidgetBytes->setRowCount(2);
+    for (size_t index{ 0 }; index < 32; index++) {
+        if (index % 8 == 0) {
+            auto item{ new QTableWidgetItem(QString::number(4 - (index / 8))) };
+            item->setTextAlignment(Qt::AlignCenter);
+            tableWidgetBytes->setItem(0, index, item);
+            tableWidgetBytes->setSpan(0, index, 1, 8);
+        }
+        auto item{ new QTableWidgetItem() };
+        item->setBackground(QBrush{ QColor(255, 255, 255) }); // Set to white
+        tableWidgetBytes->setItem(1, index, item);
+    }
+    tableWidgetBytes->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tableWidgetBytes->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void MainWindow::on_checkBoxCommonBit_stateChanged(int state) {
@@ -51,4 +63,11 @@ void MainWindow::on_spinBoxIoctlCode_valueChanged(int value) {
     comboBoxTransferMethod->setCurrentIndex(value & 0x3);
     spinBoxDeviceType->setValue((value & 0x7FFF0000) >> 16);
     spinBoxFunction->setValue((value & 0x1FFC) >> 2);
+
+    // Highlight the set bits in the table of bytes
+    QColor highlighted{ 170, 167, 255 };
+    QColor white{ 255, 255, 255 };
+    for (size_t index{ 0 }; index < 32; index++) {
+        tableWidgetBytes->item(1, index)->setBackground(QBrush{ (value & (0x80000000 >> index)) ? highlighted : white });
+    }
 }

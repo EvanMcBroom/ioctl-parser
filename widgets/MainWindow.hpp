@@ -10,7 +10,6 @@ class MainWindow : public QMainWindow, private Ui::MainWindow {
 
 public:
     explicit MainWindow(QWidget* parent = nullptr);
-    static QPixmap defaultWindowIcon();
 
 private Q_SLOTS:
     void on_checkBoxCommonBit_stateChanged(int state);

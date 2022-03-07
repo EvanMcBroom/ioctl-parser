@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>385</height>
+    <width>402</width>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -177,6 +177,18 @@
     </item>
     <item>
      <widget class="QTableWidget" name="tableWidgetBytes">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>4</number>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
       <column>
        <property name="text">
         <string>3</string>
