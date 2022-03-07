@@ -5,11 +5,16 @@
 #include <QVector>
 #include <ui_MainWindow.h>
 
+using FunctionMap = QMap<unsigned int, QString>;
+using DeviceInfo = QPair<QString, FunctionMap>;
+using DeviceMap = QMap<unsigned int, DeviceInfo>;
+
 class MainWindow : public QMainWindow, private Ui::MainWindow {
     Q_OBJECT
 
 public:
     explicit MainWindow(QWidget* parent = nullptr);
+    void setDeviceMap(const DeviceMap& deviceMap);
 
 private Q_SLOTS:
     void on_checkBoxCommonBit_stateChanged(int state);
@@ -21,4 +26,5 @@ private Q_SLOTS:
     void on_spinBoxIoctlCode_valueChanged(int value);
 
 private:
+    DeviceMap deviceMap;
 };

@@ -30,6 +30,10 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     tableWidgetBytes->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
+void MainWindow::setDeviceMap(const DeviceMap& deviceMap) {
+    this->deviceMap = deviceMap;
+}
+
 void MainWindow::on_checkBoxCommonBit_stateChanged(int state) {
     spinBoxIoctlCode->setValue((spinBoxIoctlCode->value() & ~(1 << 31)) | (((state == Qt::CheckState::Checked) ? 1 : 0) << 31));
 }
@@ -63,6 +67,16 @@ void MainWindow::on_spinBoxIoctlCode_valueChanged(int value) {
     comboBoxTransferMethod->setCurrentIndex(value & 0x3);
     spinBoxDeviceType->setValue((value & 0x7FFF0000) >> 16);
     spinBoxFunction->setValue((value & 0x1FFC) >> 2);
+
+    if (deviceMap.contains(value & 0x7FFF0000)) {
+        auto& deviceInfo{ deviceMap[value & 0x7FFF0000] };
+        labelDeviceNameValue->setText(deviceInfo.first);
+        labelFunctionNameValue->setText((deviceInfo.second.contains(value & 0x1FFC)) ? deviceInfo.second[value & 0x1FFC] : tr("Unknown"));
+    }
+    else {
+        labelDeviceNameValue->setText(tr("Unknown"));
+        labelFunctionNameValue->setText(tr("Unknown"));
+    }
 
     // Highlight the set bits in the table of bytes
     QColor highlighted{ 170, 167, 255 };
