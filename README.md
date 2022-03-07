@@ -1,5 +1,8 @@
 # IOCTL Parser
 
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE.txt)
+[![AppVeyor](https://img.shields.io/appveyor/build/EvanMcBroom/ioctl-parser?logo=AppVeyor)](https://ci.appveyor.com/project/EvanMcBroom/ioctl-parser/)
+
 A simple tool for parsing and identifying IO control (IOCTL) values and their subcomponents.
 The structure of an IOCTL value is documented on MSDN.<sup>1</sup>
 
