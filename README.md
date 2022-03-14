@@ -10,7 +10,7 @@ The structure of an IOCTL value is documented on MSDN.<sup>1</sup>
 
 Name identification for devices and functions are supported by using an embedded offline copy of the values on the "Windows IOCTL Reference" website.<sup>2</sup>
 The tool can support identifying additional device and function names by passing configuration files as arguments.
-If you are interested in doing this, please use the structure of the [the provided configuration file](resources/IOCTLs.ini) as a reference.
+If you are interested in doing this, please use the structure of the [provided example file](example.ini) or the [embedded configuration file](resources/IOCTLs.ini) as a reference.
 
 ## References
 
