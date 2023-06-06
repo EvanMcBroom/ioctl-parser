@@ -12,6 +12,19 @@ Name identification for devices and functions are supported by using an embedded
 The tool can support identifying additional device and function names by passing configuration files as arguments.
 If you are interested in doing this, please use the structure of the [provided example file](example.ini) or the [embedded configuration file](resources/IOCTLs.ini) as a reference.
 
+## Building
+
+IOCTL Parser requires [CMake](https://cmake.org/) and
+[Qt 6.5 LTS](https://wiki.qt.io/Qt_6.5_Release) to build.
+
+```
+cd builds
+cmake .. -A x64 -DCMAKE_PREFIX_PATH=C:\Qt\<version>\<compiler>\lib\cmake
+cmake --build . --config Release
+```
+
+IOCTL Parser may be packaged with `cpack` after it's built if desired.
+
 ## References
 
 1. [Defining I/O Control Codes](https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes)

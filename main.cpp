@@ -27,7 +27,7 @@ namespace {
     }
 }
 
-void main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QApplication::setApplicationName(QObject::tr("IOCTL Parser"));
     QApplication::setOrganizationName(QObject::tr("Evan McBroom"));
@@ -47,4 +47,5 @@ void main(int argc, char* argv[]) {
     mainWindow.show();
     
     app.exec();
+    return 0;
 }

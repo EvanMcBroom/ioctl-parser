@@ -1,32 +1,22 @@
-cmake_minimum_required(VERSION 3.18.5)
-project(ioctl-parser LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.24.2)
+project(ioctl-parser LANGUAGES CXX VERSION 1.1)
 set(CMAKE_CXX_STANDARD 17)
 set(Parser ${PROJECT_NAME})
 
 # Force static linking of the VC runtime
-string(REGEX REPLACE "/M[TD]d?" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
-string(REGEX REPLACE "/M[TD]d?" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # Find Qt and setup auto processing for MOC, RCC, and UIC files
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
-get_property(_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+qt_standard_project_setup()
 
 # Add and configure the parser executable
-add_executable(${Parser} WIN32 main.cpp resources/icon.rc)
+qt_add_executable(${Parser} WIN32 MACOSX_BUNDLE main.cpp resources/icon.rc)
 set_target_properties(${Parser} PROPERTIES AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(${Parser} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/widgets)
-# Add the directory which the UIC files are auto generated in
-# source: https://stackoverflow.com/a/60203765/11039217
-if(_isMultiConfig)
-    target_include_directories(${Parser} INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/${Parser}_autogen/include_$<BUILD_INTERFACE:$<CONFIG>>)
-else()
-    target_include_directories(${Parser} INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/${Parser}_autogen/include)
-endif()
 target_sources(${Parser} PRIVATE
     resources/manifest.qrc
     widgets/HexSpinBox.hpp
@@ -34,35 +24,30 @@ target_sources(${Parser} PRIVATE
     widgets/MainWindow.hpp
     widgets/MainWindow.ui
 )
-target_link_libraries(${Parser} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets)
+target_link_libraries(${Parser} PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
 
 # Find and configure windeployqt for deployment when building on Windows
 if(WIN32)
-    # Add Qt5::windeployqt
+    # Run Qt6::windeployqt at build time
     # source: https://stackoverflow.com/a/41199492/11039217
-    if(TARGET Qt5::qmake AND NOT TARGET Qt5::windeployqt)
-        get_target_property(_qt5_qmake_location Qt5::qmake IMPORTED_LOCATION)
-        execute_process(
-            COMMAND "${_qt5_qmake_location}" -query QT_INSTALL_PREFIX
-            RESULT_VARIABLE return_code
-            OUTPUT_VARIABLE qt5_install_prefix
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-        set(imported_location "${qt5_install_prefix}/bin/windeployqt.exe")
-        if(EXISTS ${imported_location})
-            add_executable(Qt5::windeployqt IMPORTED)
-            set_target_properties(Qt5::windeployqt PROPERTIES IMPORTED_LOCATION ${imported_location})
-        endif()
-    endif()
-    # Run Qt5::windeployqt at build time
-    # source: https://stackoverflow.com/a/41199492/11039217
-    if(TARGET Qt5::windeployqt)
+    if(TARGET Qt6::windeployqt)
         add_custom_command(TARGET ${Parser}
             POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
-            COMMAND set PATH=%PATH%$<SEMICOLON>${qt5_install_prefix}/bin
-            COMMAND Qt5::windeployqt --dir "$<TARGET_FILE_DIR:${Parser}>" "$<TARGET_FILE_DIR:${Parser}>/$<TARGET_FILE_NAME:${Parser}>"
-                --no-patchqt --no-quick-import --no-translations --no-system-d3d-compiler --no-webkit2 --no-angle --no-opengl-sw --no-svg
+            COMMAND set PATH=%PATH%$<SEMICOLON>${Qt6_install_prefix}/bin
+            COMMAND Qt6::windeployqt --dir "$<TARGET_FILE_DIR:${Parser}>" "$<TARGET_FILE_DIR:${Parser}>/$<TARGET_FILE_NAME:${Parser}>"
+                $<IF:$<CONFIG:Debug>,--debug,--release>
+                --no-network --no-patchqt --no-quick-import --no-translations --no-system-d3d-compiler --no-opengl-sw --no-svg
+            COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:${Parser}>/imageformats"
         )
     endif()
 endif()
+
+# CPack settings
+# Force the INSTALL and PACKAGE targets to be contained in the build tree
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/installs CACHE PATH "Project install tree" FORCE)
+endif()
+install(FILES "$<TARGET_FILE_DIR:${Parser}>/" DESTINATION .)
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_SOURCE_GENERATOR "") # Prevent cpack from packaging source code
+include(CPack)
